@@ -1,0 +1,75 @@
+<?php
+include 'koneksi.php';
+
+$id = (int) $_GET['id'];
+$pelanggan = mysqli_query($conn, "SELECT * FROM pelanggan WHERE id_pelanggan = $id");
+$data = mysqli_fetch_assoc($pelanggan);
+
+if (!$data) {
+        die("Data pelanggan tidak ditemukan.");
+}
+
+$jenis_list = mysqli_query($conn, "SELECT * FROM jenis_pelanggan ORDER BY jenis ASC");
+
+if (isset($_POST['update'])) {
+        $id_jenis       = (int) $_POST['id_jenis'];
+            $nama_pelanggan = mysqli_real_escape_string($conn, $_POST['nama_pelanggan']);
+                $alamat         = mysqli_real_escape_string($conn, $_POST['alamat']);
+                    $no_handphone   = mysqli_real_escape_string($conn, $_POST['no_handphone']);
+
+                        $sql = "UPDATE pelanggan 
+                                    SET id_jenis = $id_jenis, nama_pelanggan = '$nama_pelanggan', alamat = '$alamat', no_handphone = '$no_handphone' 
+                                                WHERE id_pelanggan = $id";
+
+                                                    if (mysqli_query($conn, $sql)) {
+                                                                header("Location: pelanggan.php");
+                                                                        exit;
+                                                    } else {
+                                                                echo "Gagal mengubah data: " . mysqli_error($conn);
+                                                    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+        <title>Edit Pelanggan</title>
+            <style>
+                    body { font-family: Arial, sans-serif; margin: 30px; }
+                            form { max-width: 400px; }
+                                    label { display: block; margin-top: 10px; font-weight: bold; }
+                                            input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+                                                    button { margin-top: 15px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+                                                            a { display: inline-block; margin-top: 15px; text-decoration: none; color: #555; }
+                                                                </style>
+                                                                </head>
+                                                                <body>
+                                                                    <h2>Edit Pelanggan</h2>
+                                                                        <form method="POST">
+                                                                                <label>Nama Pelanggan</label>
+                                                                                        <input type="text" name="nama_pelanggan" value="<?= htmlspecialchars($data['nama_pelanggan']); ?>" required>
+
+                                                                                                <label>Jenis Pelanggan</label>
+                                                                                                        <select name="id_jenis" required>
+                                                                                                                    <?php while ($j = mysqli_fetch_assoc($jenis_list)) { ?>
+                                                                                                                                    <option value="<?= $j['id_jenis']; ?>" <?= ($j['id_jenis'] == $data['id_jenis']) ? 'selected' : ''; ?>>
+                                                                                                                                                        <?= htmlspecialchars($j['jenis']); ?>
+                                                                                                                                                                        </option>
+                                                                                                                                                                                    <?php } ?>
+                                                                                                                                                                                            </select>
+
+                                                                                                                                                                                                    <label>Alamat</label>
+                                                                                                                                                                                                            <textarea name="alamat" rows="3" required><?= htmlspecialchars($data['alamat']); ?></textarea>
+
+                                                                                                                                                                                                                    <label>No. Handphone</label>
+                                                                                                                                                                                                                            <input type="text" name="no_handphone" value="<?= htmlspecialchars($data['no_handphone']); ?>" required>
+
+                                                                                                                                                                                                                                    <button type="submit" name="update">Update</button>
+                                                                                                                                                                                                                                            <a href="pelanggan.php">Batal</a>
+                                                                                                                                                                                                                                                </form>
+                                                                                                                                                                                                                                                </body>
+                                                                                                                                                                                                                                                </html>
+                                                                                                                                                                                                                                                
+                                                    }
+}

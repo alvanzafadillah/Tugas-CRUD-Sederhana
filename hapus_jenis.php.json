@@ -1,0 +1,15 @@
+<?php
+include 'koneksi.php';
+
+$id = (int) $_GET['id'];
+
+try {
+        mysqli_query($conn, "DELETE FROM jenis_pelanggan WHERE id_jenis = $id");
+            header("Location: jenis_pelanggan.php");
+                exit;
+} catch (mysqli_sql_exception $e) {
+        echo "Tidak bisa menghapus jenis pelanggan ini karena masih digunakan oleh data pelanggan. <a href='jenis_pelanggan.php'>Kembali</a>";
+}
+?>
+
+}

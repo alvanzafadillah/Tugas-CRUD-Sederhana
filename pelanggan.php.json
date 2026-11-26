@@ -1,0 +1,68 @@
+<?php
+include 'koneksi.php';
+
+$query = mysqli_query($conn, "
+    SELECT p.id_pelanggan, p.nama_pelanggan, j.jenis, p.alamat, p.no_handphone
+        FROM pelanggan AS p
+            INNER JOIN jenis_pelanggan AS j ON p.id_jenis = j.id_jenis
+                ORDER BY p.id_pelanggan ASC
+                ");
+                ?>
+
+                <!DOCTYPE html>
+                <html lang="id">
+                <head>
+                    <meta charset="UTF-8">
+                        <title>Data Pelanggan</title>
+                            <style>
+                                    body { font-family: Arial, sans-serif; margin: 30px; }
+                                            nav { margin-bottom: 20px; }
+                                                    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+                                                            th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+                                                                    th { background-color: #f4f4f4; }
+                                                                            .btn { padding: 6px 12px; text-decoration: none; border-radius: 4px; color: white; font-size: 14px; }
+                                                                                    .btn-tambah { background-color: #28a745; }
+                                                                                            .btn-edit { background-color: #ffc107; color: black; }
+                                                                                                    .btn-hapus { background-color: #dc3545; }
+                                                                                                        </style>
+                                                                                                        </head>
+                                                                                                        <body>
+                                                                                                            <nav>
+                                                                                                                    <a href="index.php" class="btn" style="background-color: #343a40;">Produk</a>
+                                                                                                                            <a href="pelanggan.php" class="btn" style="background-color: #007bff;">Pelanggan</a>
+                                                                                                                                    <a href="jenis_pelanggan.php" class="btn" style="background-color: #17a2b8;">Jenis Pelanggan</a>
+                                                                                                                                        </nav>
+
+                                                                                                                                            <h2>Daftar Pelanggan</h2>
+                                                                                                                                                <a href="tambah_pelanggan.php" class="btn btn-tambah">+ Tambah Pelanggan</a>
+
+                                                                                                                                                    <table>
+                                                                                                                                                            <tr>
+                                                                                                                                                                        <th>No</th>
+                                                                                                                                                                                    <th>Nama Pelanggan</th>
+                                                                                                                                                                                                <th>Jenis</th>
+                                                                                                                                                                                                            <th>Alamat</th>
+                                                                                                                                                                                                                        <th>No. Handphone</th>
+                                                                                                                                                                                                                                    <th>Aksi</th>
+                                                                                                                                                                                                                                            </tr>
+                                                                                                                                                                                                                                                    <?php 
+                                                                                                                                                                                                                                                            $no = 1;
+                                                                                                                                                                                                                                                                    while ($row = mysqli_fetch_assoc($query)) { 
+                                                                                                                                                                                                                                                                                ?>
+                                                                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                                                                                    <td><?= $no++; ?></td>
+                                                                                                                                                                                                                                                                                                                <td><?= htmlspecialchars($row['nama_pelanggan']); ?></td>
+                                                                                                                                                                                                                                                                                                                            <td><?= htmlspecialchars($row['jenis']); ?></td>
+                                                                                                                                                                                                                                                                                                                                        <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                                                                                                                                                                                                                                                                                                                                    <td><?= htmlspecialchars($row['no_handphone']); ?></td>
+                                                                                                                                                                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                                                                                                                                                                                <a href="edit_pelanggan.php?id=<?= $row['id_pelanggan']; ?>" class="btn btn-edit">Edit</a>
+                                                                                                                                                                                                                                                                                                                                                                                                <a href="hapus_pelanggan.php?id=<?= $row['id_pelanggan']; ?>" class="btn btn-hapus" onclick="return confirm('Yakin ingin menghapus pelanggan ini?')">Hapus</a>
+                                                                                                                                                                                                                                                                                                                                                                                                            </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                    </tr>
+                                                                                                                                                                                                                                                                                                                                                                                                                            <?php } ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </table>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </body>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                    }

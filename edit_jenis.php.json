@@ -1,0 +1,52 @@
+<?php
+include 'koneksi.php';
+
+$id = (int) $_GET['id'];
+$result = mysqli_query($conn, "SELECT * FROM jenis_pelanggan WHERE id_jenis = $id");
+$data = mysqli_fetch_assoc($result);
+
+if (!$data) {
+        die("Data jenis pelanggan tidak ditemukan.");
+}
+
+if (isset($_POST['update'])) {
+        $jenis = mysqli_real_escape_string($conn, $_POST['jenis']);
+            $sql   = "UPDATE jenis_pelanggan SET jenis = '$jenis' WHERE id_jenis = $id";
+
+                if (mysqli_query($conn, $sql)) {
+                            header("Location: jenis_pelanggan.php");
+                                    exit;
+                } else {
+                            echo "Gagal mengubah data: " . mysqli_error($conn);
+                }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+        <title>Edit Jenis Pelanggan</title>
+            <style>
+                    body { font-family: Arial, sans-serif; margin: 30px; }
+                            form { max-width: 400px; }
+                                    label { display: block; margin-top: 10px; font-weight: bold; }
+                                            input { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+                                                    button { margin-top: 15px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+                                                            a { display: inline-block; margin-top: 15px; text-decoration: none; color: #555; }
+                                                                </style>
+                                                                </head>
+                                                                <body>
+                                                                    <h2>Edit Jenis Pelanggan</h2>
+                                                                        <form method="POST">
+                                                                                <label>Jenis Pelanggan</label>
+                                                                                        <input type="text" name="jenis" value="<?= htmlspecialchars($data['jenis']); ?>" required>
+
+                                                                                                <button type="submit" name="update">Update</button>
+                                                                                                        <a href="jenis_pelanggan.php">Batal</a>
+                                                                                                            </form>
+                                                                                                            </body>
+                                                                                                            </html>
+                                                                                                            
+                }
+}
